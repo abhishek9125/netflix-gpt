@@ -1,7 +1,9 @@
 import React, { useState, useRef } from 'react';
-import { BG_URL } from '../utils/constants';
-import { checkValidData } from '../utils/validate';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import Header from './Header';
+import { auth } from "../utils/firebase";
+import { BG_URL, USER_AVATAR } from '../utils/constants';
+import { checkValidData } from '../utils/validate';
 
 function Login() {
 
@@ -16,6 +18,32 @@ function Login() {
         const message = checkValidData(email.current.value, password.current.value);
         setErrorMessage(message);
         if (message) return;
+
+        if (!isSignInForm) {
+            createUserWithEmailAndPassword(
+                auth,
+                email.current.value,
+                password.current.value
+            ).then((userCredential) => {
+                const user = userCredential.user;
+            }).catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                setErrorMessage(errorCode + "-" + errorMessage);
+            });
+        } else {
+            signInWithEmailAndPassword(
+                auth,
+                email.current.value,
+                password.current.value
+            ).then((userCredential) => {
+                const user = userCredential.user;
+            }).catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                setErrorMessage(errorCode + "-" + errorMessage);
+            });
+        }
     }
 
     const toggleSignInForm = () => {
