@@ -1,11 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { BG_URL } from '../utils/constants';
+import { checkValidData } from '../utils/validate';
 import Header from './Header';
 
 function Login() {
 
     const [isSignInForm, setIsSignInForm] = useState(true);
     const [errorMessage, setErrorMessage] = useState(null);
+
+    const name = useRef(null);
+    const email = useRef(null);
+    const password = useRef(null);
+
+    const handleButtonClick = () => {
+        const message = checkValidData(email.current.value, password.current.value);
+        setErrorMessage(message);
+        if (message) return;
+    }
 
     const toggleSignInForm = () => {
         setIsSignInForm(!isSignInForm);
@@ -27,7 +38,7 @@ function Login() {
 
                 {!isSignInForm && (
                     <input
-                        // ref={name}
+                        ref={name}
                         type="text"
                         placeholder="Full Name"
                         className="p-4 my-4 w-full bg-gray-700"
@@ -35,14 +46,14 @@ function Login() {
                 )}
 
                 <input
-                    //   ref={email}
+                    ref={email}
                     type="text"
                     placeholder="Email Address"
                     className="p-4 my-4 w-full bg-gray-700"
                 />
 
                 <input
-                    //   ref={password}
+                    ref={password}
                     type="password"
                     placeholder="Password"
                     className="p-4 my-4 w-full bg-gray-700"
@@ -50,8 +61,7 @@ function Login() {
 
                 <p className="text-red-500 font-bold text-lg py-2">{errorMessage}</p>
 
-                <button className="p-4 my-6 bg-red-700 w-full rounded-lg" // onClick={handleButtonClick}
-                >
+                <button className="p-4 my-6 bg-red-700 w-full rounded-lg" onClick={handleButtonClick}>
                     {isSignInForm ? "Sign In" : "Sign Up"}
                 </button>
 
