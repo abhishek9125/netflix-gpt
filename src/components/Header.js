@@ -5,6 +5,7 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import { LOGO } from "../utils/constants";
 import { auth } from "../utils/firebase";
 import { addUser, removeUser } from "../utils/userSlice";
+import { toggleGptSearchView } from "../utils/gptSlice";
 
 function Header() {
 
@@ -12,6 +13,7 @@ function Header() {
     const navigate = useNavigate();
 
     const user = useSelector((store) => store.user);
+    const showGptSearch = useSelector((store) => store.gpt.showGptSearch);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -35,6 +37,10 @@ function Header() {
         return () => unsubscribe();
     }, []);
 
+    const handleGptSearchClick = () => {
+        dispatch(toggleGptSearchView());
+    };
+
     const handleSignOut = () => {
         signOut(auth)
             .then(() => {
@@ -48,8 +54,14 @@ function Header() {
     return (
         <div className="absolute top-0 w-screen px-8 py-2 bg-gradient-to-b from-black z-20 flex flex-col md:flex-row justify-between">
             <img className="w-44 mx-auto md:mx-0" src={LOGO} alt="logo" />
-            { user &&
+            {user &&
                 <div className="flex p-2 justify-between">
+                    <button
+                        className="py-2 px-4 mx-4 my-2 bg-purple-800 text-white rounded-lg"
+                        onClick={handleGptSearchClick}
+                    >
+                        {showGptSearch ? "Homepage" : "GPT Search"}
+                    </button>
                     <img
                         className="hidden md:block w-12 h-12"
                         alt="usericon"
