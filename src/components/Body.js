@@ -19,10 +19,7 @@ function Body() {
 
     return (
         <div>
-            <RouterProvider router={appRouter}>
-                <Login />
-                <Browse />
-            </RouterProvider>
+            <RouterProvider router={appRouter} />
         </div>
     )
 }

@@ -8,7 +8,7 @@ function VideoBackground({ movieId }) {
     useMovieTrailer(movieId);
 
     return (
-        <div className="w-screen">
+        <div className="w-screen -mt-32">
             <iframe
                 className="w-screen aspect-video"
                 src={
